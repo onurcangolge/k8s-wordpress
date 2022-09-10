@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: test
+spec:
+  selector:
+    matchLabels:
+      environment: test
+      app: mysql
+  template:
+    metadata:
+      labels:
+        environment: test
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.6
+          resources:
+            limits:
+              memory: "512M"
+              cpu: "0.5"
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-test
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-test
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-test
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-test
+                  key: MYSQL_DATABASE
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql
+      volumes:
+        - name: mysql
+          persistentVolumeClaim:
+            claimName: mysql
+      nodeSelector:
+        environment: test
+      tolerations:
+        - key: "environment"
+          operator: "Equal"
+          value: "test"
+          effect: "NoSchedule"
