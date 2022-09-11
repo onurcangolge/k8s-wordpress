@@ -4,7 +4,7 @@ Using WordPress deployment which provides hands-on experience as it's a two tier
 
 ## To-Do
 
-- [ ] Prepare base and overlay templates for production and test environments.**
+- [ ] Prepare base and overlay templates for production and test environments.
 
 - [ ] Deploy Issuer type individual TLS certificate issuers for test and production environments. 
 
